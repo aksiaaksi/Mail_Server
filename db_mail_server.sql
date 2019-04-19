@@ -21,8 +21,7 @@ values ('aksi', '@mail.ru', 'aksi', 'ivanov');
 insert into users (email_address_name, domain_address, name, surname)
 values ('a_k_s', '@mail.ru', 'aksi', 'ivanov');
 
-select *
-from users;
+
 
 
 

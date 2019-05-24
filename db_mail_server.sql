@@ -237,8 +237,45 @@ select count(id_sender) draft from messages_2
     where id_sender = 55 and is_sent = 0 and sender_status_trash = 0
 
 
---#14
+--#14 Who corresponded with whom
+
+select u1.name, u2.name from users u1
+
+    inner join  messages_2 m
+            on u1.id = m.id_sender
+    inner join users u2 on u2.id = m.id_recipient
+
+where is_sent = 1 and
+
+      not exists (select id from messages_2 m2
+                    where m.id_sender = m2.id_recipient
+                    and   m.id_recipient = m2.id_sender
+                    and   m2.is_sent=1);
 
 
+--#15 message chain
+with recursive mess (id) as
+    (
+        select * from messages_2 m
+            where id = 10
+        union all
+
+        select * from messages_2 m
+        join mess on mess.id = m.id
+    )
+select * from mess;
 
 
+--#16 length
+
+with recursive  mess (id) as
+    (
+        select id from messages_2 m
+        union all
+
+        select id from messages_2 m
+
+        join mess on mess.id = m.id
+    )
+select count(1) from mess
+;
